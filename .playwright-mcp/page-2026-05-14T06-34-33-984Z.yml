@@ -1,0 +1,39 @@
+- generic [ref=e3]:
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - heading "设置" [level=1] [ref=e6]
+      - generic [ref=e7]:
+        - heading "每日预设" [level=2] [ref=e8]
+        - paragraph [ref=e9]: 修改预设仅影响明天及以后的计划
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - generic [ref=e12]: 起始时间
+            - textbox [ref=e13]: 06:00:00
+          - generic [ref=e14]:
+            - generic [ref=e15]: 结束时间
+            - textbox [ref=e16]: 22:00:00
+        - generic [ref=e17]:
+          - generic [ref=e18]: "每日次数: 5"
+          - slider [ref=e19]: "5"
+          - generic [ref=e20]:
+            - generic [ref=e21]: "1"
+            - generic [ref=e22]: "12"
+        - button "已保存 ✓" [active] [ref=e39]
+      - generic [ref=e24]:
+        - heading "账号" [level=2] [ref=e25]
+        - generic [ref=e26]: "邮箱: mom@daily.com"
+        - generic [ref=e27]: "注册时间: 2026/5/14"
+      - button "退出登录" [ref=e28]
+  - navigation [ref=e29]:
+    - link "🏠 今天" [ref=e30] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e31]: 🏠
+      - generic [ref=e32]: 今天
+    - link "📅 历史" [ref=e33] [cursor=pointer]:
+      - /url: /history
+      - generic [ref=e34]: 📅
+      - generic [ref=e35]: 历史
+    - link "⚙️ 设置" [ref=e36] [cursor=pointer]:
+      - /url: /settings
+      - generic [ref=e37]: ⚙️
+      - generic [ref=e38]: 设置

@@ -8,14 +8,14 @@ interface DayPlan {
 
 function formatUTCTime(isoString: string) {
   const d = new Date(isoString)
-  return `${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
 }
 
 function isOnTime(planned: string, actual: string) {
   const [ph, pm] = planned.split(':').map(Number)
   const plannedMin = ph * 60 + pm
   const d = new Date(actual)
-  const actualMin = d.getUTCHours() * 60 + d.getUTCMinutes()
+  const actualMin = d.getHours() * 60 + d.getMinutes()
   return Math.abs(actualMin - plannedMin) <= 10
 }
 

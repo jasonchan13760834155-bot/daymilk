@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from './useAuth'
 import { generatePlanTimes } from '../utils/plan'
@@ -11,12 +11,16 @@ interface Plan {
   sort_order: number
 }
 
+// PostgreSQL TIME returns "HH:MM:SS", normalize to "HH:MM"
+function norm(t: string) { return t.slice(0, 5) }
+
 export function useTodaysPlans() {
   const { user } = useAuth()
   const { preset } = usePreset()
   const [plans, setPlans] = useState<Plan[]>([])
   const [loading, setLoading] = useState(true)
   const [recording, setRecording] = useState(false)
+  const generatedRef = useRef(false)
 
   const today = new Date().toISOString().slice(0, 10)
 
@@ -30,8 +34,10 @@ export function useTodaysPlans() {
       .order('sort_order')
 
     if (data && data.length > 0) {
-      setPlans(data)
-    } else if (preset) {
+      setPlans(data.map((p: Plan) => ({ ...p, planned_time: norm(p.planned_time) })))
+      generatedRef.current = true
+    } else if (preset && !generatedRef.current) {
+      generatedRef.current = true
       const times = generatePlanTimes(preset.start_time, preset.end_time, preset.daily_count)
       const rows = times.map((time, i) => ({
         user_id: user.id,
@@ -40,7 +46,7 @@ export function useTodaysPlans() {
         sort_order: i + 1
       }))
       const { data: inserted } = await supabase.from('daily_plans').insert(rows).select('id, planned_time, actual_time, sort_order')
-      if (inserted) setPlans(inserted)
+      if (inserted) setPlans(inserted.map((p: Plan) => ({ ...p, planned_time: norm(p.planned_time) })))
     }
     setLoading(false)
   }, [user, preset, today])
@@ -52,7 +58,7 @@ export function useTodaysPlans() {
     if (!incomplete.length) return { error: '今日计划已全部完成' }
 
     const now = new Date()
-    const nowMin = now.getUTCHours() * 60 + now.getUTCMinutes()
+    const nowMin = now.getHours() * 60 + now.getMinutes()
 
     const nearest = incomplete.reduce((a, b) => {
       const [ah, am] = a.planned_time.split(':').map(Number)

@@ -16,7 +16,7 @@ export function usePreset() {
 
   const fetchPreset = useCallback(async () => {
     if (!user) return
-    const { data } = await supabase.from('presets').select('*').eq('user_id', user.id).single()
+    const { data } = await supabase.from('presets').select('*').eq('user_id', user.id).maybeSingle()
     setPreset(data)
     setLoading(false)
   }, [user])
@@ -27,9 +27,9 @@ export function usePreset() {
     if (!user) return
     const { data } = await supabase
       .from('presets')
-      .upsert({ user_id: user.id, ...preset, ...updates }, { onConflict: 'user_id' })
+      .upsert({ user_id: user.id, ...(preset || {}), ...updates }, { onConflict: 'user_id' })
       .select()
-      .single()
+      .maybeSingle()
     if (data) setPreset(data)
   }
 

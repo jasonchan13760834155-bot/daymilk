@@ -29,7 +29,7 @@ export function findNearestPlan(plans: Plan[]): Plan | null {
   if (!incomplete.length) return null
 
   const now = new Date()
-  const nowMinutes = now.getUTCHours() * 60 + now.getUTCMinutes()
+  const nowMinutes = now.getHours() * 60 + now.getMinutes()
 
   return incomplete.reduce((nearest, plan) => {
     const [ph, pm] = plan.planned_time.split(':').map(Number)
@@ -45,7 +45,7 @@ export function formatTimeDiff(planned: string, actual: string): string {
   const [ph, pm] = planned.split(':').map(Number)
   const plannedMin = ph * 60 + pm
   const actualDate = new Date(actual)
-  const actualMin = actualDate.getUTCHours() * 60 + actualDate.getUTCMinutes()
+  const actualMin = actualDate.getHours() * 60 + actualDate.getMinutes()
   const diff = actualMin - plannedMin
   const sign = diff >= 0 ? '+' : ''
   return `${sign}${diff}min`

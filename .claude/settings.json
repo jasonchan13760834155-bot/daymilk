@@ -21,7 +21,10 @@
       "mcp__playwright__browser_take_screenshot",
       "mcp__playwright__browser_fill_form",
       "mcp__playwright__browser_click",
-      "mcp__playwright__browser_evaluate"
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_type",
+      "Bash(curl -s -X DELETE https://wntdvumanfaoikmypczj.supabase.co/rest/v1/daily_plans?user_id=eq.eb4f6f52-4c1c-4e43-9530-70fe44ced822 -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U')",
+      "Bash(curl -s -X DELETE https://wntdvumanfaoikmypczj.supabase.co/rest/v1/daily_plans?date=eq.2026-05-14 -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U' -w '\\\\nHTTP %{http_code}\\\\n')"
     ]
   }
 }

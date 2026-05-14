@@ -1,0 +1,18 @@
+- generic [ref=e19]:
+  - generic [ref=e20]:
+    - generic [ref=e21]: 🤱
+    - heading "DayMilk" [level=1] [ref=e22]
+    - paragraph [ref=e23]: 每日吸奶记录
+  - generic [ref=e24]:
+    - generic [ref=e34]: Email not confirmed
+    - generic [ref=e25]:
+      - generic [ref=e26]: 邮箱
+      - textbox "your@email.com" [ref=e27]: mom.testuser@gmail.com
+    - generic [ref=e28]:
+      - generic [ref=e29]: 密码
+      - textbox "••••••" [ref=e30]: test123456
+    - button "登录" [ref=e31]
+  - paragraph [ref=e32]:
+    - text: 还没有账号？
+    - link "注册" [ref=e33] [cursor=pointer]:
+      - /url: /register

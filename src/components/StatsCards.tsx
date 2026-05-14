@@ -15,7 +15,7 @@ export default function StatsCards({ plans }: { plans: Plan[] }) {
         const [ph, pm] = p.planned_time!.split(':').map(Number)
         const plannedMin = ph * 60 + pm
         const d = new Date(p.actual_time!)
-        const actualMin = d.getUTCHours() * 60 + d.getUTCMinutes()
+        const actualMin = d.getHours() * 60 + d.getMinutes()
         return sum + (actualMin - plannedMin)
       }, 0) / hasActual.length)
     : 0
@@ -24,7 +24,7 @@ export default function StatsCards({ plans }: { plans: Plan[] }) {
     const [ph, pm] = p.planned_time!.split(':').map(Number)
     const plannedMin = ph * 60 + pm
     const d = new Date(p.actual_time!)
-    const actualMin = d.getUTCHours() * 60 + d.getUTCMinutes()
+    const actualMin = d.getHours() * 60 + d.getMinutes()
     return Math.abs(actualMin - plannedMin) <= 10
   }).length
 

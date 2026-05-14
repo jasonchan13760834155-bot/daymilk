@@ -35,7 +35,7 @@ describe('findNearestPlan', () => {
 
   beforeEach(() => {
     vi.useFakeTimers()
-    vi.setSystemTime(new Date('2026-05-14T14:08:00Z'))
+    vi.setSystemTime(new Date(2026, 4, 14, 14, 8, 0))
   })
 
   afterEach(() => vi.useRealTimers())
@@ -60,14 +60,14 @@ describe('findNearestPlan', () => {
 
 describe('formatTimeDiff', () => {
   it('formats positive diff', () => {
-    expect(formatTimeDiff('14:00', '2026-05-14T14:08:00Z')).toBe('+8min')
+    expect(formatTimeDiff('14:00', new Date(2026, 4, 14, 14, 8, 0).toISOString())).toBe('+8min')
   })
 
   it('formats negative diff (early)', () => {
-    expect(formatTimeDiff('14:00', '2026-05-14T13:55:00Z')).toBe('-5min')
+    expect(formatTimeDiff('14:00', new Date(2026, 4, 14, 13, 55, 0).toISOString())).toBe('-5min')
   })
 
   it('formats exact on time', () => {
-    expect(formatTimeDiff('14:00', '2026-05-14T14:00:00Z')).toBe('+0min')
+    expect(formatTimeDiff('14:00', new Date(2026, 4, 14, 14, 0, 0).toISOString())).toBe('+0min')
   })
 })
