@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Layout from './components/Layout'
 import Today from './pages/Today'
 import History from './pages/History'
 import Settings from './pages/Settings'
@@ -38,9 +39,11 @@ export default function App() {
             <Route path="/register" element={<Register />} />
           </Route>
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Today />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route element={<Layout />}>
+              <Route path="/" element={<Today />} />
+              <Route path="/history" element={<History />} />
+              <Route path="/settings" element={<Settings />} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>
