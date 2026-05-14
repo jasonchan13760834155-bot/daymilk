@@ -51,7 +51,7 @@ export default function PlanItem({ plan, isActive, onEdit, onDelete }: Props) {
         </div>
         {done && plan.actual_time && (
           <div className="text-xs text-green-600">
-            实际 {new Date(plan.actual_time).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })} · 偏差 {formatTimeDiff(plan.planned_time, plan.actual_time)}
+            实际 {(() => { const d = new Date(plan.actual_time); return `${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}` })()} · 偏差 {formatTimeDiff(plan.planned_time, plan.actual_time)}
           </div>
         )}
         {!done && isActive && (

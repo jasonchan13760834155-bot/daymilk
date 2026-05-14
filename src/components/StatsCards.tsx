@@ -13,18 +13,19 @@ export default function StatsCards({ plans }: { plans: Plan[] }) {
   const avgDeviation = hasActual.length
     ? Math.round(hasActual.reduce((sum, p) => {
         const [ph, pm] = p.planned_time!.split(':').map(Number)
-        const plannedMs = (ph * 60 + pm) * 60000
-        const actualMs = new Date(p.actual_time!).getTime()
-        const diff = actualMs - plannedMs - new Date('1970-01-01T00:00:00Z').getTime()
-        return sum + diff / 60000
+        const plannedMin = ph * 60 + pm
+        const d = new Date(p.actual_time!)
+        const actualMin = d.getUTCHours() * 60 + d.getUTCMinutes()
+        return sum + (actualMin - plannedMin)
       }, 0) / hasActual.length)
     : 0
 
   const onTime = hasActual.filter(p => {
     const [ph, pm] = p.planned_time!.split(':').map(Number)
-    const plannedMs = (ph * 60 + pm) * 60000
-    const actualMs = new Date(p.actual_time!).getTime() - new Date('1970-01-01T00:00:00Z').getTime()
-    return Math.abs(actualMs - plannedMs) / 60000 <= 15
+    const plannedMin = ph * 60 + pm
+    const d = new Date(p.actual_time!)
+    const actualMin = d.getUTCHours() * 60 + d.getUTCMinutes()
+    return Math.abs(actualMin - plannedMin) <= 15
   }).length
 
   return (

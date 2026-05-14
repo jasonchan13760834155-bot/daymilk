@@ -6,6 +6,19 @@ interface DayPlan {
   actual_time: string | null
 }
 
+function formatUTCTime(isoString: string) {
+  const d = new Date(isoString)
+  return `${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`
+}
+
+function isOnTime(planned: string, actual: string) {
+  const [ph, pm] = planned.split(':').map(Number)
+  const plannedMin = ph * 60 + pm
+  const d = new Date(actual)
+  const actualMin = d.getUTCHours() * 60 + d.getUTCMinutes()
+  return Math.abs(actualMin - plannedMin) <= 15
+}
+
 export default function DayDetail({ plans, date }: { plans: DayPlan[]; date: string }) {
   if (!date) return null
 
@@ -27,11 +40,8 @@ export default function DayDetail({ plans, date }: { plans: DayPlan[]; date: str
                   <span className={`font-heading ${done ? 'text-foreground' : 'text-muted-foreground'}`}>{plan.planned_time}</span>
                 </div>
                 {done && plan.actual_time && (
-                  <span className={`text-xs px-2 py-1 rounded-lg ${
-                    Math.abs(new Date(plan.actual_time).getTime() - new Date(`1970-01-01T${plan.planned_time}:00`).getTime() - new Date('1970-01-01T00:00:00').getTime()) / 60000 <= 15
-                      ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
-                  }`}>
-                    实际 {new Date(plan.actual_time).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}
+                  <span className={`text-xs px-2 py-1 rounded-lg ${isOnTime(plan.planned_time, plan.actual_time) ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                    实际 {formatUTCTime(plan.actual_time)}
                     {' '}{formatTimeDiff(plan.planned_time, plan.actual_time)}
                   </span>
                 )}

@@ -1,0 +1,62 @@
+- generic [ref=e3]:
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]: 回看记录
+        - heading "历史" [level=1] [ref=e8]
+      - generic [ref=e9]:
+        - button "◀" [ref=e10]
+        - generic [ref=e11]: 2026年5月
+        - button "▶" [ref=e12]
+      - generic [ref=e14]:
+        - generic [ref=e15]: 一
+        - generic [ref=e16]: 二
+        - generic [ref=e17]: 三
+        - generic [ref=e18]: 四
+        - generic [ref=e19]: 五
+        - generic [ref=e20]: 六
+        - generic [ref=e21]: 日
+        - button "1" [ref=e26]: "1"
+        - button "2" [ref=e28]: "2"
+        - button "3" [ref=e30]: "3"
+        - button "4" [ref=e32]: "4"
+        - button "5" [ref=e34]: "5"
+        - button "6" [ref=e36]: "6"
+        - button "7" [ref=e38]: "7"
+        - button "8" [ref=e40]: "8"
+        - button "9" [ref=e42]: "9"
+        - button "10" [ref=e44]: "10"
+        - button "11" [ref=e46]: "11"
+        - button "12" [ref=e48]: "12"
+        - button "13" [ref=e50]: "13"
+        - button "14" [ref=e52]: "14"
+        - button "15" [ref=e54]
+        - button "16" [ref=e55]
+        - button "17" [ref=e56]
+        - button "18" [ref=e57]
+        - button "19" [ref=e58]
+        - button "20" [ref=e59]
+        - button "21" [ref=e60]
+        - button "22" [ref=e61]
+        - button "23" [ref=e62]
+        - button "24" [ref=e63]
+        - button "25" [ref=e64]
+        - button "26" [ref=e65]
+        - button "27" [ref=e66]
+        - button "28" [ref=e67]
+        - button "29" [ref=e68]
+        - button "30" [ref=e69]
+        - button "31" [ref=e70]
+  - navigation [ref=e71]:
+    - link "🏠 今天" [ref=e72] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e73]: 🏠
+      - generic [ref=e74]: 今天
+    - link "📅 历史" [ref=e75] [cursor=pointer]:
+      - /url: /history
+      - generic [ref=e76]: 📅
+      - generic [ref=e77]: 历史
+    - link "⚙️ 设置" [ref=e78] [cursor=pointer]:
+      - /url: /settings
+      - generic [ref=e79]: ⚙️
+      - generic [ref=e80]: 设置
