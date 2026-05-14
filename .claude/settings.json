@@ -8,7 +8,19 @@
       "Bash(git -C /Users/jason/DailyMilk status)",
       "Bash(git -C /Users/jason/DailyMilk add src/hooks/useTodaysPlans.ts src/components/StatsCards.tsx src/components/RecordButton.tsx src/components/PlanItem.tsx src/components/PlanList.tsx src/pages/Today.tsx)",
       "Bash(git -C /Users/jason/DailyMilk commit -m ' *)",
-      "Bash(node scripts/generate-icons.mjs)"
+      "Bash(node scripts/generate-icons.mjs)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(pkill -9 -f \"vite\")",
+      "Bash(curl -s http://localhost:5199)",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_snapshot",
+      "Bash(pkill -f \"vite.*5199\")",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_fill_form",
+      "mcp__playwright__browser_click"
     ]
   }
 }

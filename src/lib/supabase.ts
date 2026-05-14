@@ -1,13 +1,60 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+function createSupabaseClient(): SupabaseClient {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY env vars')
+  if (supabaseUrl?.startsWith('https://') && supabaseAnonKey?.startsWith('eyJ')) {
+    return createClient(supabaseUrl, supabaseAnonKey)
+  }
+
+  console.warn('Supabase credentials not configured. Using mock client for UI preview.')
+
+  // Return a mock client that returns empty/null results for preview
+  const noop = () => {}
+  return {
+    auth: {
+      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: noop } } }),
+      signInWithPassword: () => Promise.resolve({ data: {}, error: new Error('Supabase not configured') }),
+      signUp: () => Promise.resolve({ data: {}, error: new Error('Supabase not configured') }),
+      signOut: () => Promise.resolve({ error: null }),
+    },
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          eq: () => ({
+            gte: () => ({
+              lte: () => ({
+                order: () => Promise.resolve({ data: [], error: null }),
+              }),
+              order: () => Promise.resolve({ data: [], error: null }),
+            }),
+            single: () => Promise.resolve({ data: null, error: null }),
+            order: () => Promise.resolve({ data: [], error: null }),
+          }),
+          single: () => Promise.resolve({ data: null, error: null }),
+        }),
+      }),
+      insert: () => ({
+        select: () => Promise.resolve({ data: [], error: null }),
+      }),
+      update: () => ({
+        eq: () => Promise.resolve({ error: null }),
+      }),
+      delete: () => ({
+        eq: () => Promise.resolve({ error: null }),
+      }),
+      upsert: () => ({
+        select: () => ({
+          single: () => Promise.resolve({ data: null, error: null }),
+        }),
+      }),
+    }),
+  } as unknown as SupabaseClient
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createSupabaseClient()
 
 export type Database = {
   public: {
