@@ -1,0 +1,76 @@
+- generic [ref=e3]:
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - heading "今天" [level=1] [ref=e8]
+          - generic [ref=e9]: 5月14日 周四
+        - generic [ref=e10]: 🤱
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - generic [ref=e13]: 2/5
+          - generic [ref=e14]: 完成度
+        - generic [ref=e15]:
+          - generic [ref=e16]: +486min
+          - generic [ref=e17]: 平均偏差
+        - generic [ref=e18]:
+          - generic [ref=e19]: 0%
+          - generic [ref=e20]: 按时完成率
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]: 记录吸奶
+          - generic [ref=e25]:
+            - img [ref=e26]
+            - generic [ref=e29]: 下一个计划 14:00
+        - button "记录" [ref=e31]:
+          - generic [ref=e36]: 记录
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - heading "今日计划" [level=2] [ref=e39]
+          - generic [ref=e40]: 编辑
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - generic [ref=e44]: 06:00
+              - generic [ref=e45]: 已完成 14:02
+            - generic [ref=e46]: +482min
+            - button [ref=e47]:
+              - img [ref=e48]
+          - generic [ref=e52]:
+            - generic [ref=e53]:
+              - generic [ref=e54]: 10:00
+              - generic [ref=e55]: 已完成 18:10
+            - generic [ref=e56]: +490min
+            - button [ref=e57]:
+              - img [ref=e58]
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - generic [ref=e64]: 14:00
+              - generic [ref=e65]: 进行中
+            - button [ref=e66]:
+              - img [ref=e67]
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - generic [ref=e73]: 18:00
+              - generic [ref=e74]: 待吸奶
+            - button [ref=e75]:
+              - img [ref=e76]
+          - generic [ref=e80]:
+            - generic [ref=e81]:
+              - generic [ref=e82]: 22:00
+              - generic [ref=e83]: 待吸奶
+            - button [ref=e84]:
+              - img [ref=e85]
+  - navigation [ref=e89]:
+    - link "今天" [ref=e90] [cursor=pointer]:
+      - /url: /
+      - img [ref=e91]
+      - generic [ref=e94]: 今天
+    - link "历史" [ref=e95] [cursor=pointer]:
+      - /url: /history
+      - img [ref=e96]
+      - generic [ref=e98]: 历史
+    - link "设置" [ref=e99] [cursor=pointer]:
+      - /url: /settings
+      - img [ref=e100]
+      - generic [ref=e103]: 设置

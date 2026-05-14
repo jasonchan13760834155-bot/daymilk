@@ -29,9 +29,9 @@ export default function CalendarGrid({ year, month, summary, selectedDate, onSel
 
   return (
     <div className="px-4">
-      <div className="grid grid-cols-7 gap-1 text-center">
+      <div className="grid grid-cols-7 text-center">
         {headers.map(h => (
-          <div key={h} className="text-xs text-muted-foreground py-2">{h}</div>
+          <div key={h} className="text-[11px] text-muted-foreground py-2 font-medium">{h}</div>
         ))}
         {days.map((day, i) => {
           if (!day) return <div key={`e${i}`} />
@@ -42,15 +42,17 @@ export default function CalendarGrid({ year, month, summary, selectedDate, onSel
 
           return (
             <button key={dateStr} onClick={() => onSelect(dateStr)}
-              className={`relative py-2 text-sm rounded-full ${
-                isSelected ? 'bg-primary text-white' :
-                isToday ? 'border-2 border-primary text-primary font-bold' :
-                'text-foreground'
+              className={`relative py-2.5 text-sm rounded-full w-9 h-9 mx-auto flex items-center justify-center ${
+                isSelected
+                  ? 'bg-primary text-white font-medium'
+                  : isToday
+                    ? 'text-primary font-bold'
+                    : 'text-foreground hover:bg-muted'
               }`}>
               {day}
               {info && !isSelected && (
-                <span className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
-                  info.completed ? 'bg-green-500' : info.done > 0 ? 'bg-yellow-400' : 'bg-muted-foreground'
+                <span className={`absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
+                  info.completed ? 'bg-success' : info.done > 0 ? 'bg-yellow-400' : 'bg-muted-foreground'
                 }`} />
               )}
             </button>

@@ -31,18 +31,24 @@ export default function StatsCards({ plans }: { plans: Plan[] }) {
     : 0
 
   return (
-    <div className="flex gap-3 px-4">
-      <div className="flex-1 bg-card rounded-2xl p-3 text-center shadow-sm">
-        <div className="text-xl font-heading text-foreground">{completed}/{total}</div>
-        <div className="text-[11px] text-muted-foreground mt-0.5">完成度</div>
+    <div className="flex gap-2.5 px-4 py-1">
+      <div className="flex-1 bg-card rounded-2xl p-3.5 text-center card">
+        <div className="text-xl font-heading text-primary">
+          {completed}<span className="text-sm text-primary-light">/{total}</span>
+        </div>
+        <div className="text-[11px] text-subtle mt-1">完成度</div>
       </div>
-      <div className="flex-1 bg-card rounded-2xl p-3 text-center shadow-sm">
-        <div className="text-xl font-heading text-foreground">{avgDeviation > 0 ? '+' : ''}{avgDeviation}<span className="text-xs text-muted-foreground">min</span></div>
-        <div className="text-[11px] text-muted-foreground mt-0.5">平均偏差</div>
+      <div className="flex-1 bg-card rounded-2xl p-3.5 text-center card">
+        <div className="text-xl font-heading text-accent">
+          {avgDeviation > 0 ? '+' : ''}{avgDeviation}<span className="text-xs text-muted-foreground">min</span>
+        </div>
+        <div className="text-[11px] text-subtle mt-1">平均偏差</div>
       </div>
-      <div className="flex-1 bg-card rounded-2xl p-3 text-center shadow-sm">
-        <div className="text-xl font-heading text-foreground">{onTimeRate}<span className="text-xs text-muted-foreground">%</span></div>
-        <div className="text-[11px] text-muted-foreground mt-0.5">按时完成率</div>
+      <div className="flex-1 bg-card rounded-2xl p-3.5 text-center card">
+        <div className="text-xl font-heading text-success">
+          {onTimeRate}<span className="text-xs text-muted-foreground">%</span>
+        </div>
+        <div className="text-[11px] text-subtle mt-1">按时完成率</div>
       </div>
     </div>
   )

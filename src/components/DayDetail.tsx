@@ -6,7 +6,7 @@ interface DayPlan {
   actual_time: string | null
 }
 
-function formatUTCTime(isoString: string) {
+function formatTime(isoString: string) {
   const d = new Date(isoString)
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
 }
@@ -24,28 +24,37 @@ export default function DayDetail({ plans, date }: { plans: DayPlan[]; date: str
 
   return (
     <div className="px-4 pb-4">
-      <h3 className="text-base font-heading text-foreground mb-2">{date} 详情</h3>
+      <h3 className="text-sm font-heading text-foreground mb-2">{date} 详情</h3>
       {plans.length === 0 ? (
-        <p className="text-sm text-muted-foreground">当天无记录</p>
+        <p className="text-sm text-subtle">当天无记录</p>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {plans.map(plan => {
             const done = !!plan.actual_time
             return (
-              <div key={plan.id} className="flex items-center justify-between bg-card rounded-xl p-3 shadow-sm">
-                <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${done ? 'bg-green-100 text-green-600' : 'bg-muted text-muted-foreground'}`}>
-                    {done ? '✓' : '○'}
+              <div key={plan.id}
+                className={`flex items-center bg-card rounded-xl card overflow-hidden ${
+                  done ? 'border-l-[3px] border-l-success' : 'border-l-[3px] border-l-muted-foreground/20'
+                }`}>
+                <div className="pl-3 pr-2 py-2.5 w-[72px] shrink-0">
+                  <div className={`text-[15px] font-heading leading-tight ${done ? 'text-foreground' : 'text-muted-foreground'}`}>
+                    {plan.planned_time}
                   </div>
-                  <span className={`font-heading ${done ? 'text-foreground' : 'text-muted-foreground'}`}>{plan.planned_time}</span>
+                  <div className={`text-[11px] mt-0.5 ${done ? 'text-success' : 'text-muted-foreground'}`}>
+                    {done ? '已完成' : '未完成'}
+                  </div>
                 </div>
+                <div className="flex-1" />
                 {done && plan.actual_time && (
-                  <span className={`text-xs px-2 py-1 rounded-lg ${isOnTime(plan.planned_time, plan.actual_time) ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
-                    实际 {formatUTCTime(plan.actual_time)}
-                    {' '}{formatTimeDiff(plan.planned_time, plan.actual_time)}
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium mr-3 ${
+                    isOnTime(plan.planned_time, plan.actual_time) ? 'bg-success-light text-success' : 'bg-danger-light text-danger'
+                  }`}>
+                    实际 {formatTime(plan.actual_time)} {formatTimeDiff(plan.planned_time, plan.actual_time)}
                   </span>
                 )}
-                {!done && <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-lg">未完成</span>}
+                {!done && (
+                  <span className="text-[10px] text-muted-foreground mr-3">-</span>
+                )}
               </div>
             )
           })}

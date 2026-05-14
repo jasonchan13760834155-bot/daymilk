@@ -34,29 +34,32 @@ export default function PlanItem({ plan, isActive, onEdit }: Props) {
 
   if (editing) {
     return (
-      <div className="flex flex-col gap-2 bg-card rounded-2xl p-3 shadow-sm border border-primary-light">
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground w-12 shrink-0">计划</span>
-          <input type="time" value={editPlanned} onChange={e => setEditPlanned(e.target.value)}
-            className="flex-1 h-10 rounded-xl border border-border bg-bg px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
-        </div>
-        {done && (
+      <div className="bg-card rounded-xl card border border-primary-light overflow-hidden">
+        <div className="p-3 space-y-2.5">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground w-12 shrink-0">实际</span>
-            <input type="time" value={editActual} onChange={e => setEditActual(e.target.value)}
-              className="flex-1 h-10 rounded-xl border border-border bg-bg px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
+            <span className="text-xs text-muted-foreground w-8">计划</span>
+            <input type="time" value={editPlanned} onChange={e => setEditPlanned(e.target.value)}
+              className="flex-1 h-9 rounded-lg border border-border bg-bg px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
           </div>
-        )}
-        <div className="flex justify-end gap-2">
-          <button onClick={() => {
-            const newActual = done && editActual
-              ? hhmmToISO(today, editActual)
-              : plan.actual_time
-            onEdit(plan.id, editPlanned, newActual)
-            setEditing(false)
-          }}
-            className="text-sm text-primary font-medium px-2">保存</button>
-          <button onClick={() => setEditing(false)} className="text-sm text-muted-foreground px-2">取消</button>
+          {done && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground w-8">实际</span>
+              <input type="time" value={editActual} onChange={e => setEditActual(e.target.value)}
+                className="flex-1 h-9 rounded-lg border border-border bg-bg px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+          )}
+          <div className="flex justify-end gap-2 pt-0.5">
+            <button onClick={() => setEditing(false)}
+              className="text-xs text-muted-foreground px-3 py-1.5">取消</button>
+            <button onClick={() => {
+              const newActual = done && editActual
+                ? hhmmToISO(today, editActual)
+                : plan.actual_time
+              onEdit(plan.id, editPlanned, newActual)
+              setEditing(false)
+            }}
+              className="text-xs bg-primary text-white font-medium px-4 py-1.5 rounded-lg">保存</button>
+          </div>
         </div>
       </div>
     )
@@ -67,38 +70,45 @@ export default function PlanItem({ plan, isActive, onEdit }: Props) {
   const isOnTime = Math.abs(diffNum) <= 10
 
   return (
-    <div className={`flex items-center bg-card rounded-xl shadow-sm overflow-hidden ${
-      done ? 'border-l-[4px] border-l-green-500' :
-      isActive ? 'border-l-[4px] border-l-primary border border-primary-light' :
-      'border-l-[4px] border-l-transparent'
+    <div className={`flex items-center bg-card rounded-xl card overflow-hidden ${
+      done ? 'border-l-[3px] border-l-success' :
+      isActive ? 'border-l-[3px] border-l-primary ring-1 ring-primary-light' :
+      'border-l-[3px] border-l-transparent'
     }`}>
-      {/* Time column */}
-      <div className="pl-3 pr-2 py-3 min-w-[60px]">
-        <div className={`text-base font-heading ${done ? 'text-foreground' : isActive ? 'text-foreground' : 'text-muted-foreground'}`}>
+      <div className="pl-3 pr-2 py-3 w-[72px] shrink-0">
+        <div className={`text-[15px] font-heading leading-tight ${
+          done ? 'text-foreground' : isActive ? 'text-foreground' : 'text-muted-foreground'
+        }`}>
           {plan.planned_time}
         </div>
         <div className={`text-[11px] mt-0.5 ${
-          done ? 'text-green-600' :
-          isActive ? 'text-primary' :
+          done ? 'text-success' :
+          isActive ? 'text-primary font-medium' :
           'text-muted-foreground'
         }`}>
           {done ? `已完成 ${isoToHHMM(plan.actual_time!)}` : isActive ? '进行中' : '待吸奶'}
         </div>
       </div>
 
-      {/* Deviation badge */}
       <div className="flex-1" />
+
       {done && plan.actual_time && (
-        <span className={`text-[10px] px-1.5 py-0.5 rounded-md mr-1 ${
-          isOnTime ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+        <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium mr-2 ${
+          isOnTime ? 'bg-success-light text-success' : 'bg-danger-light text-danger'
         }`}>
           {diffStr}
         </span>
       )}
 
-      {/* Actions */}
-      <button onClick={() => { setEditPlanned(plan.planned_time); setEditActual(plan.actual_time ? isoToHHMM(plan.actual_time) : ''); setEditing(true) }} className="w-7 h-7 flex items-center justify-center text-muted-foreground hover:text-foreground">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+      <button
+        onClick={() => {
+          setEditPlanned(plan.planned_time)
+          setEditActual(plan.actual_time ? isoToHHMM(plan.actual_time) : '')
+          setEditing(true)
+        }}
+        className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground rounded-lg mr-1"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
       </button>
     </div>
   )
