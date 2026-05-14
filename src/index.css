@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&family=Varela+Round&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #EC4899;
+  --color-primary-light: #F9A8D4;
+  --color-accent: #8B5CF6;
+  --color-bg: #FDF2F8;
+  --color-foreground: #831843;
+  --color-card: #FFFFFF;
+  --color-border: #FBCFE8;
+  --color-muted: #F1EEF5;
+  --color-muted-foreground: #9CA3AF;
+  --font-heading: 'Varela Round', sans-serif;
+  --font-body: 'Nunito Sans', sans-serif;
+}
+
+* { font-family: var(--font-body); }
+h1, h2, h3, h4, .font-heading { font-family: var(--font-heading); }
+body { background-color: var(--color-bg); color: var(--color-foreground); }
