@@ -1,0 +1,72 @@
+- generic [ref=e3]:
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - generic [ref=e9]: 5月14日 周四
+          - heading "今天" [level=1] [ref=e10]
+        - generic [ref=e11]: 🤱
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]:
+            - text: "2"
+            - generic [ref=e15]: /5
+          - generic [ref=e16]: 今日进度
+        - generic [ref=e17]:
+          - generic [ref=e18]: +6min
+          - generic [ref=e19]: 平均偏差
+        - generic [ref=e20]:
+          - generic [ref=e21]: 2/2
+          - generic [ref=e22]: 按时完成
+      - button "⏺️ 记录吸奶时间 点击记录当前时间" [ref=e24]:
+        - generic [ref=e27]:
+          - generic [ref=e28]: ⏺️
+          - generic [ref=e29]: 记录吸奶时间
+          - generic [ref=e30]: 点击记录当前时间
+      - generic [ref=e31]:
+        - heading "今日计划" [level=2] [ref=e33]
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e36]: ✓
+            - generic [ref=e37]:
+              - generic [ref=e38]: 06:00
+              - generic [ref=e39]: 实际 06:02 · 偏差 +2min
+            - button "✏️" [ref=e40]
+            - button "🗑" [ref=e41]
+          - generic [ref=e42]:
+            - generic [ref=e43]: ✓
+            - generic [ref=e44]:
+              - generic [ref=e45]: 10:00
+              - generic [ref=e46]: 实际 10:10 · 偏差 +10min
+            - button "✏️" [ref=e47]
+            - button "🗑" [ref=e48]
+          - generic [ref=e49]:
+            - generic [ref=e50]: ⟳
+            - generic [ref=e51]:
+              - generic [ref=e52]: 14:00
+              - generic [ref=e53]: 即将进行...
+            - button "✏️" [ref=e54]
+            - button "🗑" [ref=e55]
+          - generic [ref=e56]:
+            - generic [ref=e57]: ○
+            - generic [ref=e59]: 18:00
+            - button "✏️" [ref=e60]
+            - button "🗑" [ref=e61]
+          - generic [ref=e62]:
+            - generic [ref=e63]: ○
+            - generic [ref=e65]: 22:00
+            - button "✏️" [ref=e66]
+            - button "🗑" [ref=e67]
+  - navigation [ref=e68]:
+    - link "🏠 今天" [ref=e69] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e70]: 🏠
+      - generic [ref=e71]: 今天
+    - link "📅 历史" [ref=e72] [cursor=pointer]:
+      - /url: /history
+      - generic [ref=e73]: 📅
+      - generic [ref=e74]: 历史
+    - link "⚙️ 设置" [ref=e75] [cursor=pointer]:
+      - /url: /settings
+      - generic [ref=e76]: ⚙️
+      - generic [ref=e77]: 设置
