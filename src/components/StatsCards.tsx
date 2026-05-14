@@ -25,7 +25,7 @@ export default function StatsCards({ plans }: { plans: Plan[] }) {
     const plannedMin = ph * 60 + pm
     const d = new Date(p.actual_time!)
     const actualMin = d.getUTCHours() * 60 + d.getUTCMinutes()
-    return Math.abs(actualMin - plannedMin) <= 15
+    return Math.abs(actualMin - plannedMin) <= 10
   }).length
 
   return (

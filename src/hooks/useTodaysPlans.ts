@@ -74,9 +74,16 @@ export function useTodaysPlans() {
     return { error: '记录失败，请重试' }
   }, [plans])
 
-  const updatePlan = async (id: string, planned_time: string) => {
-    await supabase.from('daily_plans').update({ planned_time }).eq('id', id)
-    setPlans(prev => prev.map(p => p.id === id ? { ...p, planned_time } : p))
+  const updatePlan = async (id: string, planned_time: string, actual_time?: string | null) => {
+    const update: Record<string, string | null> = { planned_time }
+    if (actual_time !== undefined) {
+      update.actual_time = actual_time
+    }
+    await supabase.from('daily_plans').update(update).eq('id', id)
+    setPlans(prev => prev.map(p => {
+      if (p.id !== id) return p
+      return { ...p, planned_time, ...(actual_time !== undefined ? { actual_time } : {}) }
+    }))
   }
 
   const deletePlan = async (id: string) => {

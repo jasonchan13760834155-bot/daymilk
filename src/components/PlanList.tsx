@@ -9,7 +9,7 @@ interface Plan {
 
 interface Props {
   plans: Plan[]
-  onEdit: (id: string, time: string) => void
+  onEdit: (id: string, planned_time: string, actual_time?: string | null) => void
   onDelete: (id: string) => void
 }
 

@@ -16,7 +16,7 @@ function isOnTime(planned: string, actual: string) {
   const plannedMin = ph * 60 + pm
   const d = new Date(actual)
   const actualMin = d.getUTCHours() * 60 + d.getUTCMinutes()
-  return Math.abs(actualMin - plannedMin) <= 15
+  return Math.abs(actualMin - plannedMin) <= 10
 }
 
 export default function DayDetail({ plans, date }: { plans: DayPlan[]; date: string }) {
