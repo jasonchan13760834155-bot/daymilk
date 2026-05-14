@@ -27,49 +27,73 @@ function createSupabaseClient(): SupabaseClient {
 
 function createDevMockClient(): SupabaseClient {
   const noop = () => {}
+  const today = new Date().toISOString().slice(0, 10)
 
   // Simple in-memory store
   const store = new Map<string, any[]>()
   store.set('presets', [{
     id: 'dev-preset-0000-0000-0000-000000000000',
     user_id: 'dev-user-0000-0000-0000-000000000000',
-    start_time: '06:00',
-    end_time: '22:00',
-    daily_count: 5,
+    slots: [
+      { start: '06:00', end: '07:00' },
+      { start: '11:00', end: '12:00' },
+      { start: '13:00', end: '14:00' },
+      { start: '19:00', end: '20:00' },
+      { start: '22:00', end: '23:00' },
+    ],
     updated_at: new Date().toISOString(),
   }])
 
-  const today = new Date().toISOString().slice(0, 10)
-  store.set('daily_plans', [
-    { id: 'plan-1', user_id: 'dev-user-0000-0000-0000-000000000000', date: today, planned_time: '06:00', actual_time: `${today}T06:02:00Z`, sort_order: 1 },
-    { id: 'plan-2', user_id: 'dev-user-0000-0000-0000-000000000000', date: today, planned_time: '10:00', actual_time: `${today}T10:10:00Z`, sort_order: 2 },
-    { id: 'plan-3', user_id: 'dev-user-0000-0000-0000-000000000000', date: today, planned_time: '14:00', actual_time: null, sort_order: 3 },
-    { id: 'plan-4', user_id: 'dev-user-0000-0000-0000-000000000000', date: today, planned_time: '18:00', actual_time: null, sort_order: 4 },
-    { id: 'plan-5', user_id: 'dev-user-0000-0000-0000-000000000000', date: today, planned_time: '22:00', actual_time: null, sort_order: 5 },
-  ])
+  const todaySlots = [
+    { start: '06:00', end: '07:00' },
+    { start: '11:00', end: '12:00' },
+    { start: '13:00', end: '14:00' },
+    { start: '19:00', end: '20:00' },
+    { start: '22:00', end: '23:00' },
+  ]
+
+  store.set('daily_plans', todaySlots.map((slot, index) => ({
+    id: `plan-${index + 1}`,
+    user_id: 'dev-user-0000-0000-0000-000000000000',
+    date: today,
+    planned_start_time: slot.start,
+    planned_end_time: slot.end,
+    actual_start_time: null,
+    actual_end_time: null,
+    sort_order: index + 1,
+  })))
 
   // Generate past history data
   for (let d = 1; d <= 14; d++) {
     const date = new Date()
     date.setDate(date.getDate() - d)
     const ds = date.toISOString().slice(0, 10)
-    for (let i = 0; i < 5; i++) {
-      const h = 6 + i * 4
-      const planned = `${String(h).padStart(2, '0')}:00`
+    const historySlots = [
+      { start: '06:00', end: '07:00' },
+      { start: '11:00', end: '12:00' },
+      { start: '13:00', end: '14:00' },
+      { start: '19:00', end: '20:00' },
+      { start: '22:00', end: '23:00' },
+    ]
+    historySlots.forEach((slot, i) => {
       const allDone = d > 1 || i < 3
-      const offset = Math.round((Math.random() - 0.5) * 20)
-      const ah = Math.min(23, Math.max(0, h + Math.floor(offset / 60)))
-      const am = Math.min(59, Math.max(0, offset % 60))
+      const offset = Math.round((Math.random() - 0.5) * 40)
+      const startH = parseInt(slot.start.split(':')[0])
+      const startM = parseInt(slot.start.split(':')[1]) + offset
+      const endH = parseInt(slot.end.split(':')[0])
+      const endM = parseInt(slot.end.split(':')[1]) + offset
       const existing = store.get('daily_plans') || []
       existing.push({
         id: `hist-${ds}-${i}`,
         user_id: 'dev-user-0000-0000-0000-000000000000',
         date: ds,
-        planned_time: planned,
-        actual_time: allDone ? `${ds}T${String(ah).padStart(2, '0')}:${String(am).padStart(2, '0')}:00Z` : null,
+        planned_start_time: slot.start,
+        planned_end_time: slot.end,
+        actual_start_time: allDone ? `${ds}T${String(Math.min(23, Math.max(0, startH))).padStart(2, '0')}:${String(Math.min(59, Math.max(0, startM))).padStart(2, '0')}:00Z` : null,
+        actual_end_time: allDone ? `${ds}T${String(Math.min(23, Math.max(0, endH))).padStart(2, '0')}:${String(Math.min(59, Math.max(0, endM))).padStart(2, '0')}:00Z` : null,
         sort_order: i + 1,
       })
-    }
+    })
   }
 
   let nextId = 200
@@ -122,6 +146,8 @@ function createDevMockClient(): SupabaseClient {
       if (limitCount) rows = rows.slice(0, limitCount)
       return Promise.resolve({ data: rows[0] || null, error: null })
     }
+
+    builder.maybeSingle = () => builder.single()
 
     // execute query (for select that returns array)
     builder.then = (resolve: any) => {
@@ -195,6 +221,8 @@ function createDevMockClient(): SupabaseClient {
         return { data: null, error: null }
       })
     }
+
+    builder.maybeSingle = () => builder.single()
 
     // Make thenable for direct resolution
     builder.then = (resolve: any) => {
@@ -284,14 +312,14 @@ export type Database = {
   public: {
     Tables: {
       presets: {
-        Row: { id: string; user_id: string; start_time: string; end_time: string; daily_count: number; updated_at: string }
-        Insert: { user_id: string; start_time: string; end_time: string; daily_count: number }
-        Update: { start_time?: string; end_time?: string; daily_count?: number }
+        Row: { id: string; user_id: string; slots: Array<{ start: string; end: string }>; updated_at: string }
+        Insert: { user_id: string; slots: Array<{ start: string; end: string }> }
+        Update: { slots?: Array<{ start: string; end: string }> }
       }
       daily_plans: {
-        Row: { id: string; user_id: string; date: string; planned_time: string; actual_time: string | null; sort_order: number; created_at: string }
-        Insert: { user_id: string; date: string; planned_time: string; sort_order: number }
-        Update: { planned_time?: string; actual_time?: string | null }
+        Row: { id: string; user_id: string; date: string; planned_start_time: string; planned_end_time: string; actual_start_time: string | null; actual_end_time: string | null; sort_order: number; created_at: string }
+        Insert: { user_id: string; date: string; planned_start_time: string; planned_end_time: string; sort_order: number }
+        Update: { planned_start_time?: string; planned_end_time?: string; actual_start_time?: string | null; actual_end_time?: string | null }
       }
     }
   }
