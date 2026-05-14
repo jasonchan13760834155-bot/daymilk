@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(git commit *)",
+      "Bash(npx vitest *)",
+      "Bash(npx tsc *)",
+      "Bash(git -C /Users/jason/DailyMilk status)",
+      "Bash(git -C /Users/jason/DailyMilk add src/hooks/useTodaysPlans.ts src/components/StatsCards.tsx src/components/RecordButton.tsx src/components/PlanItem.tsx src/components/PlanList.tsx src/pages/Today.tsx)",
+      "Bash(git -C /Users/jason/DailyMilk commit -m ' *)",
+      "Bash(node scripts/generate-icons.mjs)"
+    ]
+  }
+}
