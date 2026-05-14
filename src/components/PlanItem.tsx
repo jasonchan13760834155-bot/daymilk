@@ -12,7 +12,6 @@ interface Props {
   plan: Plan
   isActive: boolean
   onEdit: (id: string, planned_time: string, actual_time?: string | null) => void
-  onDelete: (id: string) => void
 }
 
 function isoToHHMM(iso: string): string {
@@ -26,7 +25,7 @@ function hhmmToISO(dateStr: string, hhmm: string): string {
   return d.toISOString().slice(0, 11) + `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00Z`
 }
 
-export default function PlanItem({ plan, isActive, onEdit, onDelete }: Props) {
+export default function PlanItem({ plan, isActive, onEdit }: Props) {
   const done = !!plan.actual_time
   const today = new Date().toISOString().slice(0, 10)
   const [editing, setEditing] = useState(false)
@@ -63,34 +62,44 @@ export default function PlanItem({ plan, isActive, onEdit, onDelete }: Props) {
     )
   }
 
+  const diffStr = done && plan.actual_time ? formatTimeDiff(plan.planned_time, plan.actual_time) : ''
+  const diffNum = done && plan.actual_time ? parseInt(diffStr) : 0
+  const isOnTime = Math.abs(diffNum) <= 10
+
   return (
-    <div className={`flex items-center gap-3 bg-card rounded-2xl p-3 shadow-sm ${
-      done ? 'border-l-[3px] border-l-green-500' :
-      isActive ? 'border-l-[3px] border-l-primary border border-primary-light' :
-      'border-l-[3px] border-l-transparent'
+    <div className={`flex items-center bg-card rounded-xl shadow-sm overflow-hidden ${
+      done ? 'border-l-[4px] border-l-green-500' :
+      isActive ? 'border-l-[4px] border-l-primary border border-primary-light' :
+      'border-l-[4px] border-l-transparent'
     }`}>
-      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0 ${
-        done ? 'bg-green-100 text-green-600' :
-        isActive ? 'bg-primary/10 text-primary' :
-        'bg-muted text-muted-foreground'
-      }`}>
-        {done ? '✓' : isActive ? '⟳' : '○'}
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className={`text-base font-heading ${done ? 'text-green-700' : isActive ? 'text-foreground' : 'text-muted-foreground'}`}>
+      {/* Time column */}
+      <div className="pl-3 pr-2 py-3 min-w-[60px]">
+        <div className={`text-base font-heading ${done ? 'text-foreground' : isActive ? 'text-foreground' : 'text-muted-foreground'}`}>
           {plan.planned_time}
         </div>
-        {done && plan.actual_time && (
-          <div className="text-xs text-green-600">
-            实际 {isoToHHMM(plan.actual_time)} · 偏差 {formatTimeDiff(plan.planned_time, plan.actual_time)}
-          </div>
-        )}
-        {!done && isActive && (
-          <div className="text-xs text-primary">即将进行...</div>
-        )}
+        <div className={`text-[11px] mt-0.5 ${
+          done ? 'text-green-600' :
+          isActive ? 'text-primary' :
+          'text-muted-foreground'
+        }`}>
+          {done ? `已完成 ${isoToHHMM(plan.actual_time!)}` : isActive ? '进行中' : '待吸奶'}
+        </div>
       </div>
-      <button onClick={() => { setEditPlanned(plan.planned_time); setEditActual(plan.actual_time ? isoToHHMM(plan.actual_time) : ''); setEditing(true) }} className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground text-sm">✏️</button>
-      <button onClick={() => onDelete(plan.id)} className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-red-500 text-sm">🗑</button>
+
+      {/* Deviation badge */}
+      <div className="flex-1" />
+      {done && plan.actual_time && (
+        <span className={`text-[10px] px-1.5 py-0.5 rounded-md mr-1 ${
+          isOnTime ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+        }`}>
+          {diffStr}
+        </span>
+      )}
+
+      {/* Actions */}
+      <button onClick={() => { setEditPlanned(plan.planned_time); setEditActual(plan.actual_time ? isoToHHMM(plan.actual_time) : ''); setEditing(true) }} className="w-7 h-7 flex items-center justify-center text-muted-foreground hover:text-foreground">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+      </button>
     </div>
   )
 }

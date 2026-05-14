@@ -12,7 +12,13 @@ function createSupabaseClient(): SupabaseClient {
   const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
   if (supabaseUrl && supabaseAnonKey && supabaseUrl.startsWith('https://') && supabaseAnonKey.startsWith('eyJ')) {
-    return createClient(supabaseUrl, supabaseAnonKey)
+    return createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: false,
+      },
+    })
   }
 
   console.warn('Supabase credentials not configured. Using mock client for UI preview.')

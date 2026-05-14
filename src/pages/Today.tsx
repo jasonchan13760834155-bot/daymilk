@@ -4,7 +4,7 @@ import RecordButton from '../components/RecordButton'
 import PlanList from '../components/PlanList'
 
 export default function Today() {
-  const { plans, loading, recording, record, updatePlan, deletePlan } = useTodaysPlans()
+  const { plans, loading, recording, record, updatePlan } = useTodaysPlans()
 
   if (loading) {
     return (
@@ -16,19 +16,20 @@ export default function Today() {
 
   const today = new Date()
   const weekDay = ['日', '一', '二', '三', '四', '五', '六'][today.getDay()]
+  const incomplete = plans.filter(p => !p.actual_time)
+  const nextPlan = incomplete.length > 0 ? incomplete[0].planned_time : undefined
 
   return (
     <div>
-      <div className="bg-gradient-to-b from-primary-light/30 to-bg pt-8 pb-2 px-4">
-        <div className="flex justify-between items-center">
-          <div>
-            <div className="text-sm text-muted-foreground font-heading">
-              {today.getMonth() + 1}月{today.getDate()}日 周{weekDay}
-            </div>
-            <h1 className="text-2xl font-heading text-foreground">今天</h1>
+      {/* Header */}
+      <div className="px-4 pt-10 pb-3 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-heading text-foreground">今天</h1>
+          <div className="text-sm text-muted-foreground mt-0.5">
+            {today.getMonth() + 1}月{today.getDate()}日 周{weekDay}
           </div>
-          <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🤱</div>
         </div>
+        <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🤱</div>
       </div>
 
       {plans.length === 0 ? (
@@ -40,8 +41,8 @@ export default function Today() {
       ) : (
         <>
           <StatsCards plans={plans} />
-          <RecordButton onRecord={record} recording={recording} />
-          <PlanList plans={plans} onEdit={updatePlan} onDelete={deletePlan} />
+          <RecordButton onRecord={record} recording={recording} nextPlanTime={nextPlan} />
+          <PlanList plans={plans} onEdit={updatePlan} />
         </>
       )}
     </div>

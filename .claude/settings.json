@@ -24,7 +24,30 @@
       "mcp__playwright__browser_evaluate",
       "mcp__playwright__browser_type",
       "Bash(curl -s -X DELETE https://wntdvumanfaoikmypczj.supabase.co/rest/v1/daily_plans?user_id=eq.eb4f6f52-4c1c-4e43-9530-70fe44ced822 -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U')",
-      "Bash(curl -s -X DELETE https://wntdvumanfaoikmypczj.supabase.co/rest/v1/daily_plans?date=eq.2026-05-14 -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U' -w '\\\\nHTTP %{http_code}\\\\n')"
+      "Bash(curl -s -X DELETE https://wntdvumanfaoikmypczj.supabase.co/rest/v1/daily_plans?date=eq.2026-05-14 -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudGR2dW1hbmZhb2lrbXlwY3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzU0NTUsImV4cCI6MjA5NDMxMTQ1NX0.jtqhSIauU8qKB_BJdZRCDeHmc5MlC6T7W1IX8Ep466U' -w '\\\\nHTTP %{http_code}\\\\n')",
+      "Bash(npx vercel *)",
+      "Bash(curl -sI https://daymilk.vercel.app)",
+      "Bash(curl -sI https://daymilk-76snwxfev-jasonchan.vercel.app)",
+      "Bash(curl -v --connect-timeout 5 https://daymilk-76snwxfev-jasonchan.vercel.app)",
+      "Bash(npx netlify-cli *)",
+      "Bash(npx surge *)",
+      "Bash(gh auth *)",
+      "Bash(gh repo *)",
+      "Bash(npx gh-pages *)",
+      "Bash(gh api *)",
+      "Bash(curl -sI --connect-timeout 10 https://jasonchan13760834155-bot.github.io/daymilk/)",
+      "Bash(git fetch *)",
+      "Bash(git ls-tree *)",
+      "Bash(pkill -f \"gh-pages\\\\|vite build\")",
+      "Bash(git push *)",
+      "Bash(git checkout *)",
+      "Bash(git branch *)",
+      "Bash(curl -s --connect-timeout 10 https://jasonchan13760834155-bot.github.io/daymilk/)",
+      "Bash(curl -sI --connect-timeout 10 https://jasonchan13760834155-bot.github.io/daymilk/assets/index-ehK08UCy.js)",
+      "Bash(curl -s --connect-timeout 10 'https://jasonchan13760834155-bot.github.io/daymilk/')",
+      "Bash(curl -s --connect-timeout 10 http://extraordinary-cupcake-3d8219.netlify.app)",
+      "Bash(curl -sL --connect-timeout 10 https://extraordinary-cupcake-3d8219.netlify.app)",
+      "Bash(curl -sL --connect-timeout 10 https://daymilk-app.netlify.app)"
     ]
   }
 }
