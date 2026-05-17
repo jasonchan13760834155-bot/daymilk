@@ -18,33 +18,27 @@ function getStatus(plan: Plan): Status {
   return isOnTime(plan) ? 'onTime' : 'late'
 }
 
-const statusStyles: Record<Status, { dot: string; border: string; label: string; labelClass: string; timeClass: string }> = {
+const statusConfig: Record<Status, { dot: string; label: string; labelClass: string }> = {
   incomplete: {
-    dot: 'bg-[#E05555] ring-[#FDE8E8]',
-    border: 'border-l-[#E05555]',
+    dot: 'bg-[#E05555]',
     label: '未完成',
-    labelClass: 'bg-red-50/80 text-[#D14343] border-red-200',
-    timeClass: 'text-muted-foreground',
+    labelClass: 'text-[#D14343]',
   },
   onTime: {
-    dot: 'bg-success ring-[#D7EAD7]',
-    border: 'border-l-success',
+    dot: 'bg-[#5FA04E]',
     label: '准时完成',
-    labelClass: 'bg-green-50/80 text-success border-green-200',
-    timeClass: 'text-foreground',
+    labelClass: 'text-[#5FA04E]',
   },
   late: {
-    dot: 'bg-[#F0AD4E] ring-[#FEF3E0]',
-    border: 'border-l-[#F0AD4E]',
+    dot: 'bg-[#DA8A20]',
     label: '未准时',
-    labelClass: 'bg-amber-50/80 text-[#C2780A] border-amber-200',
-    timeClass: 'text-foreground',
+    labelClass: 'text-[#B8751A]',
   },
 }
 
 export default function PlanItem({ plan, isActive, onEdit, onDelete }: Props) {
   const status = getStatus(plan)
-  const s = statusStyles[status]
+  const cfg = statusConfig[status]
   const today = new Date().toISOString().slice(0, 10)
   const [editing, setEditing] = useState(false)
   const [editPlannedStart, setEditPlannedStart] = useState(plan.planned_start_time)
@@ -59,9 +53,9 @@ export default function PlanItem({ plan, isActive, onEdit, onDelete }: Props) {
   if (editing) {
     return (
       <div className="relative flex items-start gap-3">
-        <div className="w-7 flex flex-col items-center">
-          <div className={`w-5 h-5 rounded-full ring-4 flex items-center justify-center shadow-[0_5px_12px_rgba(80,61,50,0.14)] ${s.dot}`} aria-hidden="true">
-            {status === 'onTime' ? <span className="text-white text-[10px] leading-none font-bold ml-[1px]">✓</span> : null}
+        <div className="w-6 flex flex-col items-center pt-3">
+          <div className={`w-[9px] h-[9px] rounded-full ${cfg.dot}`} aria-hidden="true">
+            {status === 'onTime' ? <span className="block text-white text-[8px] leading-none font-bold text-center">✓</span> : null}
           </div>
         </div>
         <div className="plan-edit-card flex-1">
@@ -124,77 +118,64 @@ export default function PlanItem({ plan, isActive, onEdit, onDelete }: Props) {
     )
   }
 
-  const dotExtra = isActive
-    ? 'bg-pink-400 ring-pink-100'
-    : status === 'onTime'
-      ? 'bg-success ring-[#D7EAD7]'
-      : status === 'late'
-        ? 'bg-[#F0AD4E] ring-[#FEF3E0]'
-        : 'bg-[#E05555] ring-[#FDE8E8]'
-
-  const cardExtra = isActive
-    ? 'border-pink-200 bg-pink-50/40 border-l-pink-300'
-    : `${s.border} border-l-[4px] ${status === 'incomplete' ? 'bg-red-50/20' : ''}`
-
-  const timeExtra = isActive ? 'text-pink-500' : s.timeClass
+  const dotColor = isActive ? 'bg-pink-400' : cfg.dot
+  const timeColor = isActive ? 'text-pink-500' : 'text-foreground'
+  const rowBg = isActive ? 'bg-pink-50/50' : 'bg-transparent'
 
   return (
-    <div className="relative flex items-start gap-3">
-      <div className="w-7 flex flex-col items-center">
-        {isActive && <div className="absolute left-[22px] top-[10px] w-5 border-t border-dashed border-pink-200" aria-hidden="true" />}
-        <div
-          className={`w-5 h-5 rounded-full ring-4 flex items-center justify-center shadow-[0_5px_12px_rgba(80,61,50,0.14)] ${dotExtra}`}
-          aria-hidden="true"
-        >
-          {status === 'onTime' ? <span className="text-white text-[10px] leading-none font-bold ml-[1px]">✓</span> : null}
+    <div className={`relative flex items-center gap-4 rounded-2xl py-3 px-4 ${rowBg} transition-colors duration-200`}>
+      {/* Timeline connector */}
+      <div className="w-6 flex flex-col items-center self-stretch">
+        <div className={`w-[9px] h-[9px] rounded-full mt-[6px] ${dotColor}`} aria-hidden="true">
+          {status === 'onTime' ? <span className="block text-white text-[7px] leading-tight font-bold text-center">✓</span> : null}
         </div>
+        {isActive && (
+          <div className="absolute left-[25px] top-[22px] h-full border-l border-dashed border-pink-200/60" aria-hidden="true" />
+        )}
       </div>
 
-      <div className={`flex-1 rounded-[18px] border shadow-[0_8px_20px_rgba(68,52,44,0.10),inset_0_1px_0_rgba(255,255,255,0.85)] px-4 py-2.5 ${cardExtra}`}>
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex flex-col gap-1">
-            <div className={`text-xl font-extrabold tracking-wide ${timeExtra}`}>
-              {formatTimeRange(plan.planned_start_time, plan.planned_end_time)}
-            </div>
-            <span className={`inline-flex items-center text-[11px] font-semibold rounded-md px-2 py-[1px] border w-fit ${isActive ? 'bg-pink-50 text-pink-500 border-pink-200' : s.labelClass}`}>
-              {isActive ? '进行中' : s.label}
-            </span>
+      {/* Card body */}
+      <div className="flex-1 min-w-0 flex items-center justify-between gap-3">
+        <div className="flex flex-col min-w-0">
+          <div className={`text-[20px] font-extrabold tracking-tight leading-tight ${timeColor}`}>
+            {formatTimeRange(plan.planned_start_time, plan.planned_end_time)}
           </div>
-          <div className="flex items-center gap-4">
-            <button
-              type="button"
-              className={`p-1 ${isActive ? 'text-pink-400' : 'text-[#9B9590]'}`}
-              aria-label={`编辑 ${plan.planned_start_time} 的计划`}
-              onClick={() => {
-                setEditPlannedStart(plan.planned_start_time)
-                setEditPlannedEnd(plan.planned_end_time)
-                setEditActualStart(plan.actual_start_time ? isoToHHMM(plan.actual_start_time) : '')
-                setEditActualEnd(plan.actual_end_time ? isoToHHMM(plan.actual_end_time) : '')
-                setEditing(true)
-              }}
-            >
-              <img src={iconEditOutline} alt="" className="w-5 h-5" />
-            </button>
-            <button
-              type="button"
-              className={`p-1 ${isActive ? 'text-pink-400' : 'text-[#9B9590]'}`}
-              aria-label={`删除 ${plan.planned_start_time} 的计划`}
-              onClick={() => onDelete(plan.id)}
-            >
-              <img src={iconTrashOutline} alt="" className="w-5 h-5" />
-            </button>
+          <div className="flex items-center gap-3 mt-1">
+            <span className={`text-[13px] font-semibold ${isActive ? 'text-pink-400' : cfg.labelClass}`}>
+              {isActive ? '进行中' : cfg.label}
+            </span>
+            {status !== 'incomplete' && plan.actual_start_time && plan.actual_end_time && (
+              <span className="text-[13px] text-[#8A807A] tabular-nums">
+                {isoToHHMM(plan.actual_start_time)} – {isoToHHMM(plan.actual_end_time)}
+              </span>
+            )}
           </div>
         </div>
 
-        {status !== 'incomplete' && plan.actual_start_time && plan.actual_end_time ? (
-          <div className="mt-2 flex items-center gap-3">
-            <span className="text-[12px] font-semibold text-[#8E8A86]">
-              实际 {isoToHHMM(plan.actual_start_time)} - {isoToHHMM(plan.actual_end_time)}
-            </span>
-          </div>
-        ) : (
-          <div className="mt-1" />
-        )}
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            type="button"
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-black/5 transition-colors"
+            aria-label={`编辑 ${plan.planned_start_time} 的计划`}
+            onClick={() => {
+              setEditPlannedStart(plan.planned_start_time)
+              setEditPlannedEnd(plan.planned_end_time)
+              setEditActualStart(plan.actual_start_time ? isoToHHMM(plan.actual_start_time) : '')
+              setEditActualEnd(plan.actual_end_time ? isoToHHMM(plan.actual_end_time) : '')
+              setEditing(true)
+            }}
+          >
+            <img src={iconEditOutline} alt="" className="w-[18px] h-[18px] opacity-60" />
+          </button>
+          <button
+            type="button"
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-black/5 transition-colors"
+            aria-label={`删除 ${plan.planned_start_time} 的计划`}
+            onClick={() => onDelete(plan.id)}
+          >
+            <img src={iconTrashOutline} alt="" className="w-[18px] h-[18px] opacity-50" />
+          </button>
+        </div>
       </div>
     </div>
   )
