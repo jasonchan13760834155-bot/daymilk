@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from './useAuth'
+import { toHHMM } from '../utils/plan'
 
 interface DayPlan {
   id: string
-  planned_time: string
-  actual_time: string | null
+  planned_start_time: string
+  planned_end_time: string
+  actual_start_time: string | null
+  actual_end_time: string | null
 }
 
 interface DaySummary {
@@ -29,7 +32,7 @@ export function useHistory(year: number, month: number) {
 
     const { data } = await supabase
       .from('daily_plans')
-      .select('date, planned_time, actual_time')
+      .select('date, actual_start_time')
       .eq('user_id', user.id)
       .gte('date', start)
       .lte('date', end)
@@ -37,12 +40,12 @@ export function useHistory(year: number, month: number) {
 
     if (data) {
       const byDate = new Map<string, { total: number; done: number }>()
-      data.forEach(row => {
+      data.forEach((row: { date: string; actual_start_time: string | null }) => {
         const d = row.date
         if (!byDate.has(d)) byDate.set(d, { total: 0, done: 0 })
         const entry = byDate.get(d)!
         entry.total++
-        if (row.actual_time) entry.done++
+        if (row.actual_start_time) entry.done++
       })
       setSummary(Array.from(byDate.entries()).map(([date, v]) => ({
         date,
@@ -60,12 +63,33 @@ export function useHistory(year: number, month: number) {
     setSelectedDate(date)
     const { data } = await supabase
       .from('daily_plans')
-      .select('id, planned_time, actual_time')
+      .select('id, planned_start_time, planned_end_time, actual_start_time, actual_end_time')
       .eq('user_id', user!.id)
       .eq('date', date)
       .order('sort_order')
-    setSelectedPlans(data || [])
+    setSelectedPlans(
+      (data ?? []).map((r: any) => ({
+        ...r,
+        planned_start_time: toHHMM(r.planned_start_time),
+        planned_end_time: toHHMM(r.planned_end_time),
+      })),
+    )
   }
 
-  return { summary, selectedPlans, selectedDate, selectDate, loading }
+  const updatePlan = async (id: string, actual_start_time: string, actual_end_time: string) => {
+    await supabase
+      .from('daily_plans')
+      .update({ actual_start_time, actual_end_time })
+      .eq('id', id)
+    setSelectedPlans(prev => prev.map(p => {
+      if (p.id !== id) return p
+      return {
+        ...p,
+        actual_start_time,
+        actual_end_time,
+      }
+    }))
+  }
+
+  return { summary, selectedPlans, selectedDate, selectDate, loading, updatePlan }
 }
