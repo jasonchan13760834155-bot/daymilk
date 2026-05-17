@@ -1,54 +1,52 @@
 import { NavLink, Outlet } from 'react-router-dom'
-
-const TodayIcon = () => (
-  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-    <polyline points="9 22 9 12 15 12 15 22" />
-  </svg>
-)
-
-const HistoryIcon = () => (
-  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-    <line x1="16" y1="2" x2="16" y2="6" />
-    <line x1="8" y1="2" x2="8" y2="6" />
-    <line x1="3" y1="10" x2="21" y2="10" />
-  </svg>
-)
-
-const SettingsIcon = () => (
-  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="3" />
-    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-  </svg>
-)
+import iconCalendarOutline from '../assets/ui/icon-calendar-outline.png'
+import iconHomeActive from '../assets/ui/icon-home-active.png'
+import iconSettingsOutline from '../assets/ui/icon-settings-outline.png'
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-bg flex flex-col max-w-lg mx-auto relative">
-      <main className="flex-1 pb-14">
-        <Outlet />
-      </main>
-      <nav className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white/95 backdrop-blur-sm border-t border-border/40 flex justify-around py-2 z-10">
-        <NavLink to="/" className={({ isActive }) =>
-          `flex flex-col items-center gap-0.5 px-4 py-0.5 ${isActive ? 'text-primary' : 'text-muted-foreground'}`
-        }>
-          <TodayIcon />
-          <span className="text-[10px] font-medium">今天</span>
-        </NavLink>
-        <NavLink to="/history" className={({ isActive }) =>
-          `flex flex-col items-center gap-0.5 px-4 py-0.5 ${isActive ? 'text-primary' : 'text-muted-foreground'}`
-        }>
-          <HistoryIcon />
-          <span className="text-[10px] font-medium">历史</span>
-        </NavLink>
-        <NavLink to="/settings" className={({ isActive }) =>
-          `flex flex-col items-center gap-0.5 px-4 py-0.5 ${isActive ? 'text-primary' : 'text-muted-foreground'}`
-        }>
-          <SettingsIcon />
-          <span className="text-[10px] font-medium">设置</span>
-        </NavLink>
-      </nav>
+    <div className="min-h-screen w-full bg-[#F7F3F0]">
+      <div className="w-full min-h-screen bg-[#F7F3F0] flex flex-col">
+        <main className="app-main">
+          <Outlet />
+        </main>
+        <nav className="fixed left-1/2 -translate-x-1/2 bottom-0 w-full max-w-[390px]" aria-label="主导航">
+          <div className="px-5 pb-4">
+            <div className="rounded-[24px] bg-white/94 border border-white/90 shadow-[0_12px_28px_rgba(76,58,50,0.14)] px-2 py-2 flex items-center justify-between">
+          <NavLink to="/" className={({ isActive }) =>
+            `w-[112px] rounded-[26px] py-2 flex flex-col items-center gap-0.5 text-[12px] font-semibold ${
+              isActive ? 'bg-pink-50 text-pink-500' : 'text-[#8D8782]'
+            }`
+          }>
+            <div className="w-9 h-9 rounded-xl bg-transparent flex items-center justify-center">
+              <img src={iconHomeActive} alt="" className="w-6 h-6 object-contain" />
+            </div>
+            <span>今天</span>
+          </NavLink>
+          <NavLink to="/history" className={({ isActive }) =>
+            `w-[112px] py-2 flex flex-col items-center gap-0.5 text-[12px] font-semibold ${
+              isActive ? 'bg-pink-50 text-pink-500 rounded-[26px]' : 'text-[#8D8782]'
+            }`
+          }>
+            <div className="w-9 h-9 rounded-xl bg-transparent flex items-center justify-center">
+              <img src={iconCalendarOutline} alt="" className="w-6 h-6 object-contain" />
+            </div>
+            <span>历史</span>
+          </NavLink>
+          <NavLink to="/settings" className={({ isActive }) =>
+            `w-[112px] py-2 flex flex-col items-center gap-0.5 text-[12px] font-semibold ${
+              isActive ? 'bg-pink-50 text-pink-500 rounded-[26px]' : 'text-[#8D8782]'
+            }`
+          }>
+            <div className="w-9 h-9 rounded-xl bg-transparent flex items-center justify-center">
+              <img src={iconSettingsOutline} alt="" className="w-6 h-6 object-contain" />
+            </div>
+            <span>设置</span>
+          </NavLink>
+            </div>
+          </div>
+        </nav>
+      </div>
     </div>
   )
 }

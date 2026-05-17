@@ -70,7 +70,7 @@ export default function Today() {
       ) : (
         <>
           <div className="relative">
-            <div className="relative w-screen left-1/2 -translate-x-1/2 h-[210px] overflow-hidden">
+            <div className="relative w-full h-[210px] overflow-hidden">
               <img src={heroBanner} alt="" className="h-full w-full object-cover object-center" aria-hidden="true" />
               <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-[#F7F3F0]" aria-hidden="true" />
             </div>
