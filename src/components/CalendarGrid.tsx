@@ -39,6 +39,7 @@ export default function CalendarGrid({ year, month, summary, selectedDate, onSel
           const info = summaryMap.get(dateStr)
           const isToday = dateStr === today
           const isSelected = dateStr === selectedDate
+          const isPast = dateStr < today
           const hasRecords = info && info.total > 0
           const allDone = info?.completed
           const partialDone = hasRecords && !allDone && (info?.done ?? 0) > 0
@@ -60,7 +61,9 @@ export default function CalendarGrid({ year, month, summary, selectedDate, onSel
                     : 'text-foreground hover:bg-muted'
               }`}>
               {day}
-              <span className={`absolute bottom-[2px] left-1/2 -translate-x-1/2 w-[5px] h-[5px] rounded-full ${isSelected ? 'bg-white/60' : dotColor}`} />
+              {isPast && (
+                <span className={`absolute bottom-[2px] left-1/2 -translate-x-1/2 w-[5px] h-[5px] rounded-full ${isSelected ? 'bg-white/60' : dotColor}`} />
+              )}
             </button>
           )
         })}
