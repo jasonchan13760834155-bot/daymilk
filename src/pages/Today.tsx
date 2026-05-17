@@ -71,8 +71,8 @@ export default function Today() {
       ) : (
         <>
           <div className="relative">
-            <div className="relative h-[210px] overflow-hidden" style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }}>
-              <img src={heroBanner} alt="" className="h-full w-full object-cover" aria-hidden="true" />
+            <div className="relative w-screen left-1/2 -translate-x-1/2 h-[210px] overflow-hidden">
+              <img src={heroBanner} alt="" className="h-full w-full object-cover object-center" aria-hidden="true" />
             </div>
 
             <div className="absolute inset-0 px-6 pt-4">
