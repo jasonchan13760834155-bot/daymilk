@@ -31,7 +31,7 @@ export default function CalendarGrid({ year, month, summary, selectedDate, onSel
     <div className="px-4">
       <div className="grid grid-cols-7 text-center">
         {headers.map(h => (
-          <div key={h} className="text-[11px] text-muted-foreground py-2 font-medium">{h}</div>
+          <div key={h} className="text-[11px] text-muted-foreground py-2.5 font-semibold">{h}</div>
         ))}
         {days.map((day, i) => {
           if (!day) return <div key={`e${i}`} />
@@ -39,22 +39,28 @@ export default function CalendarGrid({ year, month, summary, selectedDate, onSel
           const info = summaryMap.get(dateStr)
           const isToday = dateStr === today
           const isSelected = dateStr === selectedDate
+          const hasRecords = info && info.total > 0
+          const allDone = info?.completed
+          const partialDone = hasRecords && !allDone && (info?.done ?? 0) > 0
+          const dotColor = !hasRecords
+            ? 'bg-[#E05555]'
+            : allDone
+              ? 'bg-success'
+              : partialDone
+                ? 'bg-[#F0AD4E]'
+                : 'bg-[#E05555]'
 
           return (
             <button key={dateStr} onClick={() => onSelect(dateStr)}
-              className={`relative py-2.5 text-sm rounded-full w-9 h-9 mx-auto flex items-center justify-center ${
+              className={`relative py-2.5 text-sm rounded-full w-10 h-10 mx-auto flex items-center justify-center font-medium transition-colors ${
                 isSelected
-                  ? 'bg-primary text-white font-medium'
+                  ? 'bg-primary text-white font-bold shadow-button'
                   : isToday
-                    ? 'text-primary font-bold'
+                    ? 'text-primary font-bold bg-primary-bg'
                     : 'text-foreground hover:bg-muted'
               }`}>
               {day}
-              {info && !isSelected && (
-                <span className={`absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
-                  info.completed ? 'bg-success' : info.done > 0 ? 'bg-yellow-400' : 'bg-muted-foreground'
-                }`} />
-              )}
+              <span className={`absolute bottom-[2px] left-1/2 -translate-x-1/2 w-[5px] h-[5px] rounded-full ${isSelected ? 'bg-white/60' : dotColor}`} />
             </button>
           )
         })}

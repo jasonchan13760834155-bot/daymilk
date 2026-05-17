@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import heroBanner from '../assets/generated/today-hero-banner.png'
 import recordCardArt from '../assets/generated/today-record-card.png'
-import todayAvatar from '../assets/generated/today-avatar.png'
 import { useTodaysPlans } from '../hooks/useTodaysPlans'
 import StatsCards from '../components/StatsCards'
 import RecordDialog from '../components/RecordDialog'
@@ -73,6 +72,7 @@ export default function Today() {
           <div className="relative">
             <div className="relative w-screen left-1/2 -translate-x-1/2 h-[210px] overflow-hidden">
               <img src={heroBanner} alt="" className="h-full w-full object-cover object-center" aria-hidden="true" />
+              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-[#F7F3F0]" aria-hidden="true" />
             </div>
 
             <div className="absolute inset-0 px-6 pt-4">
@@ -89,13 +89,6 @@ export default function Today() {
                   </div>
                 </div>
 
-                <div className="mt-1">
-                  <div className="w-14 h-14 rounded-full bg-white/75 shadow-[0_10px_24px_rgba(77,57,48,0.18)] flex items-center justify-center ring-4 ring-white/70">
-                    <div className="w-11 h-11 rounded-full bg-white overflow-hidden shadow-inner">
-                      <img src={todayAvatar} alt="妈妈和宝宝头像" className="w-full h-full object-cover" />
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
