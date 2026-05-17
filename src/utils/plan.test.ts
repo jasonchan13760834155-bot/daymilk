@@ -1,73 +1,126 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { generatePlanTimes, findNearestPlan, formatTimeDiff } from './plan'
+import { describe, it, expect } from 'vitest'
+import { isOnTime, formatTimeRange, isoToHHMM, hhmmToISO, nowToISOTime, addMinutes } from './plan'
 
-describe('generatePlanTimes', () => {
-  it('generates evenly spaced times between start and end', () => {
-    const result = generatePlanTimes('06:00', '22:00', 5)
-    expect(result).toEqual(['06:00', '10:00', '14:00', '18:00', '22:00'])
+const makePlan = (
+  start: string,
+  end: string,
+  actualStart: string | null,
+  actualEnd: string | null,
+) => ({
+  id: '1',
+  planned_start_time: start,
+  planned_end_time: end,
+  actual_start_time: actualStart,
+  actual_end_time: actualEnd,
+  sort_order: 1,
+})
+
+describe('isOnTime', () => {
+  it('marks plan inside the slot as on time', () => {
+    const plan = makePlan(
+      '11:00',
+      '12:00',
+      new Date(2026, 4, 14, 11, 5, 0).toISOString(),
+      new Date(2026, 4, 14, 11, 55, 0).toISOString(),
+    )
+    expect(isOnTime(plan)).toBe(true)
   })
 
-  it('handles count=1 (just start time)', () => {
-    expect(generatePlanTimes('08:00', '20:00', 1)).toEqual(['08:00'])
+  it('marks plan within ±30min of slot boundaries as on time', () => {
+    const plan = makePlan(
+      '11:00',
+      '12:00',
+      new Date(2026, 4, 14, 10, 31, 0).toISOString(),
+      new Date(2026, 4, 14, 12, 29, 0).toISOString(),
+    )
+    expect(isOnTime(plan)).toBe(true)
   })
 
-  it('handles count=2 (start and end only)', () => {
-    expect(generatePlanTimes('07:00', '21:00', 2)).toEqual(['07:00', '21:00'])
+  it('marks plan starting more than 30min early as off', () => {
+    const plan = makePlan(
+      '11:00',
+      '12:00',
+      new Date(2026, 4, 14, 10, 29, 0).toISOString(),
+      new Date(2026, 4, 14, 11, 50, 0).toISOString(),
+    )
+    expect(isOnTime(plan)).toBe(false)
   })
 
-  it('handles count=3 with 12h range', () => {
-    expect(generatePlanTimes('06:00', '18:00', 3)).toEqual(['06:00', '12:00', '18:00'])
+  it('marks plan ending more than 30min late as off', () => {
+    const plan = makePlan(
+      '11:00',
+      '12:00',
+      new Date(2026, 4, 14, 11, 0, 0).toISOString(),
+      new Date(2026, 4, 14, 12, 31, 0).toISOString(),
+    )
+    expect(isOnTime(plan)).toBe(false)
   })
 
-  it('handles non-divisible intervals by rounding', () => {
-    const result = generatePlanTimes('06:00', '22:00', 4)
-    expect(result).toEqual(['06:00', '11:20', '16:40', '22:00'])
+  it('returns false for incomplete plan', () => {
+    const plan = makePlan('11:00', '12:00', null, null)
+    expect(isOnTime(plan)).toBe(false)
   })
 })
 
-describe('findNearestPlan', () => {
-  const plans = [
-    { id: '1', planned_time: '06:00', actual_time: '2026-05-14T06:02:00Z', sort_order: 1 },
-    { id: '2', planned_time: '10:00', actual_time: null, sort_order: 2 },
-    { id: '3', planned_time: '14:00', actual_time: null, sort_order: 3 },
-    { id: '4', planned_time: '18:00', actual_time: null, sort_order: 4 },
-  ]
-
-  beforeEach(() => {
-    vi.useFakeTimers()
-    vi.setSystemTime(new Date(2026, 4, 14, 14, 8, 0))
-  })
-
-  afterEach(() => vi.useRealTimers())
-
-  it('finds nearest incomplete plan to current time', () => {
-    const result = findNearestPlan(plans)
-    expect(result?.id).toBe('3')
-    expect(result?.planned_time).toBe('14:00')
-  })
-
-  it('returns null when all plans are completed', () => {
-    const allDone = plans.map(p => ({ ...p, actual_time: p.actual_time || '2026-05-14T12:00:00Z' }))
-    expect(findNearestPlan(allDone)).toBeNull()
-  })
-
-  it('returns only remaining plan when one left', () => {
-    const oneLeft = plans.map(p => ({ ...p, actual_time: p.id === '4' ? null : '2026-05-14T12:00:00Z' }))
-    const result = findNearestPlan(oneLeft)
-    expect(result?.id).toBe('4')
+describe('formatTimeRange', () => {
+  it('joins start and end with separator', () => {
+    expect(formatTimeRange('11:00', '12:00')).toBe('11:00 - 12:00')
   })
 })
 
-describe('formatTimeDiff', () => {
-  it('formats positive diff', () => {
-    expect(formatTimeDiff('14:00', new Date(2026, 4, 14, 14, 8, 0).toISOString())).toBe('+8min')
+describe('isoToHHMM', () => {
+  it('extracts HH:MM from ISO timestamp', () => {
+    const iso = new Date(2026, 4, 14, 13, 7, 0).toISOString()
+    expect(isoToHHMM(iso)).toBe('13:07')
+  })
+})
+
+describe('hhmmToISO', () => {
+  it('builds ISO string representing local date+time', () => {
+    const iso = hhmmToISO('2026-05-14', '11:00')
+    const d = new Date(iso)
+    expect(d.getFullYear()).toBe(2026)
+    expect(d.getMonth()).toBe(4)
+    expect(d.getDate()).toBe(14)
+    expect(d.getHours()).toBe(11)
+    expect(d.getMinutes()).toBe(0)
+  })
+})
+
+describe('nowToISOTime', () => {
+  it('returns now when offset is zero', () => {
+    const before = Date.now()
+    const result = new Date(nowToISOTime(0)).getTime()
+    const after = Date.now()
+    expect(result).toBeGreaterThanOrEqual(before)
+    expect(result).toBeLessThanOrEqual(after)
   })
 
-  it('formats negative diff (early)', () => {
-    expect(formatTimeDiff('14:00', new Date(2026, 4, 14, 13, 55, 0).toISOString())).toBe('-5min')
+  it('returns 20 minutes ago when offset is -20', () => {
+    const result = new Date(nowToISOTime(-20)).getTime()
+    const expected = Date.now() - 20 * 60 * 1000
+    expect(Math.abs(result - expected)).toBeLessThan(1000)
+  })
+})
+
+describe('addMinutes', () => {
+  it('adds minutes within the same hour', () => {
+    expect(addMinutes('11:00', 20)).toBe('11:20')
   })
 
-  it('formats exact on time', () => {
-    expect(formatTimeDiff('14:00', new Date(2026, 4, 14, 14, 0, 0).toISOString())).toBe('+0min')
+  it('adds minutes crossing hour boundary', () => {
+    expect(addMinutes('11:50', 20)).toBe('12:10')
+  })
+
+  it('subtracts minutes', () => {
+    expect(addMinutes('12:10', -20)).toBe('11:50')
+  })
+
+  it('wraps around midnight', () => {
+    expect(addMinutes('23:50', 20)).toBe('00:10')
+  })
+
+  it('handles negative wrapping midnight', () => {
+    expect(addMinutes('00:10', -20)).toBe('23:50')
   })
 })

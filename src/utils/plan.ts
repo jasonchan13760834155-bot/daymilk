@@ -1,52 +1,59 @@
-export function generatePlanTimes(start: string, end: string, count: number): string[] {
-  const [sh, sm] = start.split(':').map(Number)
-  const [eh, em] = end.split(':').map(Number)
-  const startMin = sh * 60 + sm
-  const endMin = eh * 60 + em
-
-  if (count === 1) return [start]
-
-  const interval = (endMin - startMin) / (count - 1)
-  const times: string[] = []
-  for (let i = 0; i < count; i++) {
-    const totalMin = Math.round(startMin + i * interval)
-    const h = Math.floor(totalMin / 60)
-    const m = totalMin % 60
-    times.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`)
-  }
-  return times
-}
-
 export interface Plan {
   id: string
-  planned_time: string
-  actual_time: string | null
+  planned_start_time: string
+  planned_end_time: string
+  actual_start_time: string | null
+  actual_end_time: string | null
   sort_order: number
 }
 
-export function findNearestPlan(plans: Plan[]): Plan | null {
-  const incomplete = plans.filter(p => !p.actual_time)
-  if (!incomplete.length) return null
+export function isOnTime(plan: Plan): boolean {
+  if (!plan.actual_start_time || !plan.actual_end_time) return false
 
-  const now = new Date()
-  const nowMinutes = now.getHours() * 60 + now.getMinutes()
+  const [psH, psM] = plan.planned_start_time.split(':').map(Number)
+  const [peH, peM] = plan.planned_end_time.split(':').map(Number)
+  const plannedStartMin = psH * 60 + psM
+  const plannedEndMin = peH * 60 + peM
 
-  return incomplete.reduce((nearest, plan) => {
-    const [ph, pm] = plan.planned_time.split(':').map(Number)
-    const planMinutes = ph * 60 + pm
-    const [nh, nm] = nearest.planned_time.split(':').map(Number)
-    const nearestMinutes = nh * 60 + nm
-    return Math.abs(planMinutes - nowMinutes) < Math.abs(nearestMinutes - nowMinutes)
-      ? plan : nearest
-  })
+  const actualStart = new Date(plan.actual_start_time)
+  const actualEnd = new Date(plan.actual_end_time)
+  const actualStartMin = actualStart.getHours() * 60 + actualStart.getMinutes()
+  const actualEndMin = actualEnd.getHours() * 60 + actualEnd.getMinutes()
+
+  return actualStartMin >= plannedStartMin - 30 && actualEndMin <= plannedEndMin + 30
 }
 
-export function formatTimeDiff(planned: string, actual: string): string {
-  const [ph, pm] = planned.split(':').map(Number)
-  const plannedMin = ph * 60 + pm
-  const actualDate = new Date(actual)
-  const actualMin = actualDate.getHours() * 60 + actualDate.getMinutes()
-  const diff = actualMin - plannedMin
-  const sign = diff >= 0 ? '+' : ''
-  return `${sign}${diff}min`
+export function formatTimeRange(start: string, end: string): string {
+  return `${toHHMM(start)} - ${toHHMM(end)}`
+}
+
+export function toHHMM(t: string): string {
+  return t.slice(0, 5)
+}
+
+export function isoToHHMM(iso: string): string {
+  const d = new Date(iso)
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+}
+
+export function hhmmToISO(dateStr: string, hhmm: string): string {
+  const [h, m] = hhmm.split(':').map(Number)
+  const [y, mo, d] = dateStr.split('-').map(Number)
+  const local = new Date()
+  local.setFullYear(y, mo - 1, d)
+  local.setHours(h, m, 0, 0)
+  return local.toISOString()
+}
+
+export function nowToISOTime(minutesOffset: number = 0): string {
+  const d = new Date(Date.now() + minutesOffset * 60 * 1000)
+  return d.toISOString()
+}
+
+export function addMinutes(hhmm: string, minutes: number): string {
+  const [h, m] = hhmm.split(':').map(Number)
+  const total = h * 60 + m + minutes
+  const hh = String(((total % 1440) + 1440) % 1440 / 60 | 0).padStart(2, '0')
+  const mm = String(((total % 60) + 60) % 60).padStart(2, '0')
+  return `${hh}:${mm}`
 }
