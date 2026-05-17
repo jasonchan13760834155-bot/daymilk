@@ -56,7 +56,7 @@ export default function Today() {
   }
 
   return (
-    <div className="min-h-full w-full bg-[#F7F3F0] overflow-x-hidden">
+    <div className="min-h-full w-full bg-[#F7F3F0]">
       {plans.length === 0 ? (
         <div className="today-empty">
           <div className="today-empty-icon">
